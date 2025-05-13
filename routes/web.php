@@ -4,14 +4,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\todoController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/k', function () {
-//      return view('first');
+// Route::get('/', function () {
+//      return view('home');
 // });
 
-Route::get('/database', [todoController::class, 'index'])->name('home.index');
-
-Route::get('/', [todoController::class, 'show'])->name('first.index');
-
+Route::get('/', [todoController::class, 'index'])->name('home.index');
 Route::get('/todo/add', [todoController::class, 'create'])->name('add.create');
 
 Route::post('/todo/save', [todoController::class, 'simpan'])->name('add.simpan');
