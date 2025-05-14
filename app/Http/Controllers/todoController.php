@@ -63,12 +63,15 @@ class todoController extends Controller
         $request->validate([
             'status' => 'required|in:Pending,In Progress,Done',
             'priority' => 'required|in:Low,Medium,High',
+            'date' => 'required|date|after_or_equal:today',
+
         ]);
 
         $edit_todo = todoModel::findOrFail($id);
         $edit_todo->update([
             'status' => $request->status,
             'priority' => $request->priority,
+            'date' => $request->date,
         ]);
 
         return redirect()->route('home.index')->with('success', 'data berhasil diperbarui');

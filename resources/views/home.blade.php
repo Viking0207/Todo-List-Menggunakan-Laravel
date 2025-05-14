@@ -155,6 +155,16 @@
                                                         </option>
                                                     </select>
                                                 </div>
+
+                                                <div class="mb-4">
+                                                    <label class="block text-gray-700 mb-1">Tanggal</label>
+                                                    <input type="date" name="date"
+                                                        class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-lime-500"
+                                                        value="{{ $data->date }}" min="{{ now()->format('Y-m-d') }}"
+                                                        onkeydown="return false" required>
+                                                </div>
+
+
                                                 <div class="flex justify-end gap-2">
                                                     <button type="button"
                                                         onclick="closeModal('editModal{{ $data->id }}')"
