@@ -15,15 +15,17 @@
         <div class="flex justify-center mb-10">
             <h1 class="text-5xl font-bold text-lime-700 relative inline-block">
                 <i class="fas fa-list-check mr-3 text-lime-500 animate-bounce"></i>
-                    To Do List
-                <span class="absolute -top-2 -right-8 text-sm text-white bg-red-500 px-2 py-0.5 rounded-full animate-pulse shadow-lg">
+                To Do List
+                <span
+                    class="absolute -top-2 -right-8 text-sm text-white bg-red-500 px-2 py-0.5 rounded-full animate-pulse shadow-lg">
                     💪 Focus!
                 </span>
             </h1>
         </div>
 
         @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 max-w-lg mx-auto text-center">
+            <div
+                class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 max-w-lg mx-auto text-center">
                 {{ session('success') }}
             </div>
         @endif
@@ -62,7 +64,8 @@
                                 @else
                                     <i class="fas fa-question-circle text-gray-600 animate-ping"></i>
                                 @endif
-                                <span class="px-2 py-1 rounded-full text-xs font-semibold 
+                                <span
+                                    class="px-2 py-1 rounded-full text-xs font-semibold 
                                     @if ($data->status === 'Pending') bg-yellow-100 text-yellow-700
                                     @elseif ($data->status === 'In Progress') bg-teal-100 text-teal-700
                                     @elseif ($data->status === 'Done') bg-green-100 text-green-700
@@ -80,7 +83,8 @@
                                 @else
                                     <i class="fas fa-question-circle text-gray-600"></i>
                                 @endif
-                                <span class="px-2 py-1 rounded-full text-xs font-semibold 
+                                <span
+                                    class="px-2 py-1 rounded-full text-xs font-semibold 
                                     @if ($data->priority === 'Low') bg-yellow-100 text-yellow-700
                                     @elseif ($data->priority === 'Medium') bg-orange-100 text-orange-700
                                     @elseif ($data->priority === 'High') bg-red-100 text-red-700
@@ -119,10 +123,17 @@
                                                     <select name="status"
                                                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-lime-500"
                                                         required>
-                                                        <option value="" disabled {{ $data->status ? '' : 'selected' }}>Pilih Status</option>
-                                                        <option value="Pending" {{ $data->status === 'Pending' ? 'selected' : '' }}>🕒Pending</option>
-                                                        <option value="In Progress" {{ $data->status === 'In Progress' ? 'selected' : '' }}>⚙️In Progress</option>
-                                                        <option value="Done" {{ $data->status == 'Done' ? 'selected' : '' }}>✅Done</option>
+                                                        <option value="" disabled
+                                                            {{ $data->status ? '' : 'selected' }}>Pilih Status</option>
+                                                        <option value="Pending"
+                                                            {{ $data->status === 'Pending' ? 'selected' : '' }}>
+                                                            🕒Pending</option>
+                                                        <option value="In Progress"
+                                                            {{ $data->status === 'In Progress' ? 'selected' : '' }}>
+                                                            ⚙️In Progress</option>
+                                                        <option value="Done"
+                                                            {{ $data->status == 'Done' ? 'selected' : '' }}>✅Done
+                                                        </option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-4">
@@ -130,10 +141,18 @@
                                                     <select name="priority"
                                                         class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-lime-500"
                                                         required>
-                                                        <option value="" disabled {{ $data->priority ? '' : 'selected' }}>Pilih Prioritas</option>
-                                                        <option value="Low" {{ $data->priority === 'Low' ? 'selected' : '' }}>🟡Low</option>
-                                                        <option value="Medium" {{ $data->priority === 'Medium' ? 'selected' : '' }}>🟠Medium</option>
-                                                        <option value="High" {{ $data->priority === 'High' ? 'selected' : '' }}>🔴High</option>
+                                                        <option value="" disabled
+                                                            {{ $data->priority ? '' : 'selected' }}>Pilih Prioritas
+                                                        </option>
+                                                        <option value="Low"
+                                                            {{ $data->priority === 'Low' ? 'selected' : '' }}>🟡Low
+                                                        </option>
+                                                        <option value="Medium"
+                                                            {{ $data->priority === 'Medium' ? 'selected' : '' }}>
+                                                            🟠Medium</option>
+                                                        <option value="High"
+                                                            {{ $data->priority === 'High' ? 'selected' : '' }}>🔴High
+                                                        </option>
                                                     </select>
                                                 </div>
                                                 <div class="flex justify-end gap-2">
@@ -155,10 +174,19 @@
         </div>
     </div>
 
-    <a href="{{ route('add.create') }}"
-        class="fixed bottom-6 right-6 bg-lime-600 hover:bg-lime-700 text-white p-4 rounded-full shadow-lg transition duration-300 z-50">
-        <i class="fa-solid fa-plus"></i>
+    <a href="javascript:window.print()"
+        class="fixed bottom-6 right-[5.5rem] bg-emerald-600 hover:bg-emerald-700 text-white w-14 aspect-square rounded-full shadow-lg transition duration-300 z-50 flex items-center justify-center"
+        title="Print Data">
+        <i class="fa-solid fa-print text-xl"></i>
     </a>
+
+    <a href="{{ route('add.create') }}"
+        class="fixed bottom-6 right-6 bg-lime-600 hover:bg-lime-700 text-white w-14 aspect-square rounded-full shadow-lg transition duration-300 z-50 flex items-center justify-center"
+        title="Tambah Todo">
+        <i class="fa-solid fa-plus text-xl"></i>
+    </a>
+
+
 
     <script>
         function openModal(id) {
@@ -180,5 +208,26 @@
         }
     </script>
 </body>
+
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        table,
+        table * {
+            visibility: visible;
+        }
+
+        table {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
+</style>
+
 
 </html>
