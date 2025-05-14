@@ -36,7 +36,7 @@ class todoController extends Controller
             'description' => 'required|string',
             'status' => 'required|in:Pending,In Progress, Done',
             'priority' => 'required|in:Low,Medium,High',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
         ]);
 
         // $title = $validated['title'];

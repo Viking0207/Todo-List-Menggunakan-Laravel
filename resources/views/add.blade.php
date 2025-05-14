@@ -81,7 +81,9 @@
             <div>
                 <label class="block mb-1 font-semibold text-gray-700">📅 Tanggal</label>
                 <input type="date" name="date" required
-                    class="w-full p-2 border border-gray-300 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                    class="w-full p-2 border border-gray-300 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    min="{{ now()->format('Y-m-d') }}"
+                    onkeydown="return false">
             </div>
 
             <!-- Tombol -->
