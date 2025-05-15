@@ -199,7 +199,7 @@
 
 
     <script>
-        function openModal(id) {
+        function openModal(id) {`
             const modal = document.getElementById(id);
             modal.classList.remove('hidden');
             setTimeout(() => {
