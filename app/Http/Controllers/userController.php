@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class userController extends Controller
 {
-      // Halaman register
+    // Halaman register
     public function showRegisterForm()
     {
         return view('register');
@@ -18,16 +18,18 @@ class userController extends Controller
     // Proses register
     public function register(Request $request)
     {
+        // Validasi: gunakan 'password' dan 'password_confirmation'
         $request->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:tb_user,email',
-            'pass' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
+        // Simpan user baru, kolom di DB tetap 'pass'
         $user = users::create([
             'nama' => $request->nama,
             'email' => $request->email,
-            'pass' => Hash::make($request->pass),
+            'password' => Hash::make($request->password),
         ]);
 
         Auth::login($user);
@@ -44,14 +46,16 @@ class userController extends Controller
     // Proses login
     public function login(Request $request)
     {
+        // Validasi: gunakan 'password'
         $request->validate([
             'email' => 'required|email',
-            'pass' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         $user = users::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->pass, $user->pass)) {
+        // Cek password dengan kolom 'pass'
+        if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
             return redirect()->route('dashboard.index')->with('success', 'Berhasil login!');
         }

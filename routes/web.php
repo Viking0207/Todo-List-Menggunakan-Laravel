@@ -13,9 +13,10 @@ Route::get('/', [todoController::class, 'show'])->name('dashboard.index');
 
 Route::get('/database', [todoController::class, 'index'])->name('home.index');
 
-Route::get('/todo/add', [todoController::class, 'create'])->name('add.create');
-
-Route::post('/todo/save', [todoController::class, 'simpan'])->name('add.simpan');
+Route::middleware('auth')->group(function() {
+    Route::get('/todo/add', [todoController::class, 'create'])->name('add.create');
+    Route::post('/todo/save', [todoController::class, 'simpan'])->name('add.simpan');
+});
 
 Route::put('/todo/update/{id}', [todoController::class, 'update'])->name('home.update');
 // Route::patch('/todo-status/{id}', [todoController::class, 'updateStat'])->name('status.update');
@@ -28,8 +29,8 @@ Route::get('/register', [userController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [userController::class, 'register'])->name('register.store');
 
 // Login
-Route::get('/login', [userController::class, 'showLoginForm'])->name('login.form');
+Route::get('/login', [userController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [userController::class, 'login'])->name('login.do');
 
 // Logout
-Route::post('/logout', [userController::class, 'logout'])->name('logout');
+Route::post('/logout', [userController::class, 'logout'])->middleware('auth')->name('logout');

@@ -7,106 +7,135 @@
     <title>Todo List Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-pVUQsi+QpI2kzjYtCfjPReh+Udbv6ItOp+PtTzPeEaAgq5TX7RT3YnKRvpuYScOKnp51Ic65p4GzX2JbqJ5X0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="bg-gray-100 min-h-screen relative">
+<body class="bg-gray-100 min-h-screen font-poppins">
 
-    <!-- Logo + Search, tanpa header -->
-    <div class="flex justify-between items-center px-4 pt-4">
-        <!-- Logo Emoji -->
-        <a href="{{ route('home.index') }}" class="flex items-center space-x-2">
-            <div class="bg-blue-100 text-blue-600 rounded-full p-3 text-xl">
-                🗄️
-            </div>
+    <nav class="bg-white shadow flex items-center justify-between px-6 py-3 sticky top-0 z-30">
+        <a href="{{ route('dashboard.index') }}" class="flex items-center space-x-2 text-blue-600 font-bold text-xl">
+            <i class="fa-solid fa-list-check"></i>
+            <span>TodoVick</span>
         </a>
 
-        <!-- Tombol Search -->
-        <button onclick="document.getElementById('searchInput').classList.toggle('hidden')"
-            class="text-blue-600 px-3 py-1 rounded hover:bg-blue-100 transition">
-            🔍 Search
-        </button>
-    </div>
+        @if ($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mb-4 rounded">
+            <ul class="list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
 
-    <!-- Kolom input search -->
-    <div id="searchInput" class="px-4 mt-2 hidden">
-        <form method="GET" action="{{ route('dashboard.index') }}">
+        <form method="GET" action="{{ route('dashboard.index') }}" class="flex-grow max-w-xl mx-6">
             <input type="text" name="q" placeholder="Cari judul atau deskripsi..."
                 class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </form>
-    </div>
 
+        <div class="flex items-center space-x-4">
+            @guest
+                <a href="{{ route('register.form') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded">Register</a>
+                <a href="{{ route('login') }}" class="bg-lime-600 hover:bg-lime-700 text-white px-4 py-2 rounded">Login</a>
+            @endguest
 
-    <!-- Search Input -->
-    <div id="searchInput" class="p-4 hidden">
-        <input type="text" placeholder="Cari judul atau deskripsi..."
-            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400">
-    </div>
+            @auth
+                <span class="text-gray-700 font-semibold flex items-center space-x-2">
+                    <i class="fa-solid fa-user"></i>
+                    <span>{{ Auth::user()->nama ?? Auth::user()->name }}</span>
+                </span>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded flex items-center space-x-1 font-semibold">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+            @endauth
+        </div>
+    </nav>
 
-    <!-- Main Content -->
-    <main class="p-4 space-y-4">
-        @foreach ($todos as $data)
-            <div onclick="openModal(`{{ $data->title }}`, `{{ $data->description }}`)"
-                class="bg-white p-4 rounded shadow cursor-pointer hover:bg-blue-50">
-                <h2 class="text-lg font-semibold">{{ $data->title }}</h2>
-                <ul class="list-disc pl-5 text-gray-600">
-                    @foreach (explode("\n", $data->description) as $i => $line)
-                        @if ($i < 3 && trim($line) !== '')
-                            <li>{{ $line }}</li>
-                        @endif
-                    @endforeach
-                </ul>
+    <main class="p-4 space-y-4 max-w-4xl mx-auto mt-6">
+        @auth
+            @forelse ($todos as $data)
+                <div onclick="openModal(`{{ $data->title }}`, `{{ $data->description }}`)"
+                    class="bg-white p-4 rounded shadow cursor-pointer hover:bg-blue-50">
+                    <h2 class="text-lg font-semibold">{{ $data->title }}</h2>
+                    <ul class="list-disc pl-5 text-gray-600">
+                        @foreach (explode("\n", $data->description) as $i => $line)
+                            @if ($i < 3 && trim($line) !== '')
+                                <li>{{ $line }}</li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            @empty
+                <div class="text-center text-gray-500">Belum ada todo.</div>
+            @endforelse
+        @else
+            <div class="text-center text-gray-600 mt-10">
+                Silakan login untuk melihat dan mengelola todo list Anda.
             </div>
-        @endforeach
+        @endauth
     </main>
 
-    <!-- Tombol + -->
-    <button id="floatingBtn"
-        class="fixed bg-blue-600 text-white rounded-full w-14 h-14 text-2xl flex items-center justify-center shadow-lg transition-all">
-        +
-    </button>
+    @auth
+        <button id="floatingBtn"
+            class="fixed bg-blue-600 text-white rounded-full w-14 h-14 text-2xl flex items-center justify-center shadow-lg transition-all"
+            onclick="document.getElementById('modalAdd').classList.remove('hidden')">
+            +
+        </button>
+    @endauth
 
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-20">
-        <div class="bg-white p-6 rounded shadow max-w-lg w-full">
-            <h2 id="modalTitle" class="text-xl font-bold mb-2"></h2>
-            <p id="modalDesc" class="text-gray-700"></p>
-            <button onclick="closeModal()"
-                class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Tutup</button>
+    <!-- Modal Tambah Todo -->
+    <div id="modalAdd" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white rounded p-6 w-96 relative">
+            <button onclick="document.getElementById('modalAdd').classList.add('hidden')"
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+            <h2 class="text-xl font-semibold mb-4">Tambah Todo</h2>
+            <form action="{{ route('add.simpan') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="title" class="block font-semibold mb-1">Judul</label>
+                    <input type="text" name="title" id="title" required
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div>
+                    <label for="description" class="block font-semibold mb-1">Deskripsi</label>
+                    <textarea name="description" id="description" rows="4"
+                        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                </div>
+                <div class="text-right">
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                        Simpan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    @auth
-        <div class="flex justify-between items-center p-4 bg-white shadow">
-            <span>Halo, {{ Auth::user()->nama }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
-            </form>
+    <!-- Modal Detail Todo -->
+    <div id="modalDetail" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white rounded p-6 w-96 relative max-h-[80vh] overflow-y-auto">
+            <button onclick="document.getElementById('modalDetail').classList.add('hidden')"
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+            <h2 id="detailTitle" class="text-xl font-semibold mb-4"></h2>
+            <p id="detailDesc" class="whitespace-pre-line text-gray-700"></p>
         </div>
-    @endauth
-
+    </div>
 
     <script>
-        // Modal logic
         function openModal(title, desc) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalDesc').innerText = desc;
-            document.getElementById('modal').classList.remove('hidden');
-            document.getElementById('modal').classList.add('flex');
+            document.getElementById('detailTitle').textContent = title;
+            document.getElementById('detailDesc').textContent = desc;
+            document.getElementById('modalDetail').classList.remove('hidden');
         }
-
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden');
-            document.getElementById('modal').classList.remove('flex');
-        }
-
-        // Floating button follows scroll
-        const btn = document.getElementById("floatingBtn");
-        window.addEventListener("scroll", () => {
-            const scrollY = window.scrollY;
-            btn.style.top = `${scrollY + window.innerHeight - 80}px`;
-            btn.style.left = `${window.innerWidth - 80}px`;
-        });
     </script>
 
 </body>
