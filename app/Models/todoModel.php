@@ -18,9 +18,14 @@ class todoModel extends Model
         'description',
         'status',
         'priority',
-        'date'
+        'date',
+        'id_user',
     ];
 
     public $timestamps = false;
     
+    public function user()
+    {
+        return $this->belongsTo(users::class, 'id_user');
+    }
 }

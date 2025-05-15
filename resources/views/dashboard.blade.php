@@ -29,7 +29,7 @@
 
     <!-- Kolom input search -->
     <div id="searchInput" class="px-4 mt-2 hidden">
-        <form method="GET" action="{{ route('first.index') }}">
+        <form method="GET" action="{{ route('dashboard.index') }}">
             <input type="text" name="q" placeholder="Cari judul atau deskripsi..."
                 class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </form>
@@ -74,6 +74,17 @@
                 class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Tutup</button>
         </div>
     </div>
+
+    @auth
+        <div class="flex justify-between items-center p-4 bg-white shadow">
+            <span>Halo, {{ Auth::user()->nama }}</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Logout</button>
+            </form>
+        </div>
+    @endauth
+
 
     <script>
         // Modal logic
