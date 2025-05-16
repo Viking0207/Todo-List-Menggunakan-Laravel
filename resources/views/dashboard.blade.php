@@ -73,22 +73,6 @@
                 <div class="relative bg-white p-6 rounded-xl shadow-lg cursor-pointer hover:shadow-2xl hover:bg-teal-50 transition flex flex-col space-y-2"
                     onclick="openModal(`{{ addslashes($data->title) }}`, `{{ addslashes($data->description) }}`)">
 
-                    {{-- Tombol Mark Done --}}
-                    @if (strtolower($data->status) !== 'done')
-                        <form method="POST" action="{{ route('todo.markdone', $data->id) }}" class="absolute top-4 right-4"
-                            onClick="event.stopPropagation()">
-                            @csrf
-                            <button type="submit" class="text-green-600 hover:text-green-800 transition"
-                                title="Mark as Done">
-                                <i class="fa-regular fa-circle-check fa-2x"></i>
-                            </button>
-                        </form>
-                    @else
-                        <span class="absolute top-4 right-4 text-green-600" title="Sudah Done">
-                            <i class="fa-solid fa-circle-check fa-2x"></i>
-                        </span>
-                    @endif
-
                     <h2 class="text-xl font-semibold flex items-center space-x-3 text-teal-700">
                         {{-- Emoji status di depan judul --}}
                         @if (strtolower($data->status) == 'pending')

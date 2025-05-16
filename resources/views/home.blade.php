@@ -108,6 +108,22 @@
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
+                                    @if (strtolower($data->status) !== 'done')
+                                        <form method="POST" action="{{ route('todo.markdone', $data->id) }}"
+                                            onClick="event.stopPropagation()">
+                                            @csrf
+                                            <button type="submit"
+                                                class="text-green-600 hover:text-green-800 transition"
+                                                title="Mark as Done">
+                                                <i class="fa-regular fa-circle-check text-2xl"></i>
+                                            </button>
+                                        </form>
+                                    @else
+                                        {{-- <span class="text-green-600" title="Sudah Done">
+                                            <i class="fa-solid fa-circle-check text-2xl"></i>
+                                        </span> --}}
+                                    @endif
+
 
                                     <div id="editModal{{ $data->id }}"
                                         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 z-50">

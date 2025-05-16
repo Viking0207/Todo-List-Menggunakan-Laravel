@@ -83,6 +83,7 @@
                 <input type="date" name="date" required
                     class="w-full p-2 border border-gray-300 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-emerald-400"
                     min="{{ now()->format('Y-m-d') }}"
+                    value="{{ now()->format('Y-m-d') }}"
                     onkeydown="return false">
             </div>
 
