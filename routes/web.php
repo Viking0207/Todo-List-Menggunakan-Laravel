@@ -16,13 +16,13 @@ Route::get('/database', [todoController::class, 'index'])->name('home.index');
 Route::middleware('auth')->group(function() {
     Route::get('/todo/add', [todoController::class, 'create'])->name('add.create');
     Route::post('/todo/save', [todoController::class, 'simpan'])->name('add.simpan');
+
+    // Route untuk update status mark done
+    Route::post('/todo/{id}/markdone', [todoController::class, 'markDone'])->name('todo.markdone');
+
+    Route::put('/todo/update/{id}', [todoController::class, 'update'])->name('home.update');
+    Route::delete('/todo/{id}', [todoController::class, 'delete'])->name('home.delete');
 });
-
-Route::put('/todo/update/{id}', [todoController::class, 'update'])->name('home.update');
-// Route::patch('/todo-status/{id}', [todoController::class, 'updateStat'])->name('status.update');
-
-Route::delete('/todo/{id}', [todoController::class, 'delete'])->name('home.delete');
-
 
 // Register
 Route::get('/register', [userController::class, 'showRegisterForm'])->name('register.form');

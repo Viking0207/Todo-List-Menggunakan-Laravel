@@ -23,13 +23,24 @@ class todoController extends Controller
         return view('home', compact('data_todo'));
     }
 
-    public function show()
+    public function show(Request $request)
     {
+        $query = $request->input('q'); // ambil keyword dari input search
 
         if (Auth::check()) {
-            $todos = todoModel::where('id_user', Auth::id())->orderBy('date', 'desc')->get();
+            $todosQuery = todoModel::where('id_user', Auth::id())
+                ->orderBy('date', 'desc');
+
+            if ($query) {
+                $todosQuery->where(function ($q) use ($query) {
+                    $q->where('title', 'like', '%' . $query . '%')
+                        ->orWhere('description', 'like', '%' . $query . '%');
+                });
+            }
+
+            $todos = $todosQuery->get();
         } else {
-            $todos = collect(); // kosong kalau belum login
+            $todos = collect(); // kosong jika belum login
         }
 
         return view('dashboard', compact('todos'));
@@ -104,5 +115,20 @@ class todoController extends Controller
         $data_todo->delete();
 
         return redirect()->route('home.index')->with('success', 'data berhasil dihapus');
+    }
+
+    public function markDone($id)
+    {
+        // Cari todo milik user yang login
+        $todo = todoModel::where('id', $id)
+            ->where('id_user', Auth::id())
+            ->firstOrFail();
+
+        // Update status jadi Done
+        $todo->update([
+            'status' => 'Done',
+        ]);
+
+        return redirect()->back()->with('success', 'Todo berhasil ditandai selesai!');
     }
 }

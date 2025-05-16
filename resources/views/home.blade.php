@@ -131,9 +131,6 @@
                                                         <option value="In Progress"
                                                             {{ $data->status === 'In Progress' ? 'selected' : '' }}>
                                                             ⚙️In Progress</option>
-                                                        <option value="Done"
-                                                            {{ $data->status == 'Done' ? 'selected' : '' }}>✅Done
-                                                        </option>
                                                     </select>
                                                 </div>
                                                 <div class="mb-4">
