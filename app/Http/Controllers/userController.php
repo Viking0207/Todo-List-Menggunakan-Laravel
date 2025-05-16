@@ -67,6 +67,6 @@ class userController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('home.index')->with('success', 'Berhasil logout');
+        return redirect()->route('dashboard.index')->with('success', 'Berhasil logout');
     }
 }

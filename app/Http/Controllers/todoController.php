@@ -12,7 +12,13 @@ class todoController extends Controller
     //Konfirmasi database
     public function index()
     {
-        $data_todo = todoModel::all();
+        if (Auth::check()) {
+            $data_todo = todoModel::where('id_user', Auth::id())->orderBy('date', 'desc')->get();
+        } else {
+            // tampilkan todo milik user lain secara umum, atau kosongkan
+            $data_todo = todoModel::orderBy('date', 'desc')->get(); // atau bisa gunakan filter sesuai kebutuhan
+        }
+
 
         return view('home', compact('data_todo'));
     }
@@ -29,6 +35,11 @@ class todoController extends Controller
         return view('dashboard', compact('todos'));
     }
 
+    // public function __construct()
+    // {
+    //     $this->middleware('auth')->only(['create', 'simpan', 'update', 'delete']);
+    // }
+
     //Adding data ke database
     public function create()
     {
@@ -42,19 +53,19 @@ class todoController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'status' => 'required|in:Pending,In Progress, Done',
+            'status' => 'required|in:Pending,In Progress,Done',
             'priority' => 'required|in:Low,Medium,High',
             'date' => 'required|date|after_or_equal:today',
         ]);
 
         todoModel::create([
-        'title' => $request->title,
-        'description' => $request->description,
-        'status' => $request->status,
-        'priority' => $request->priority,
-        'date' => $request->date,
-        'id_user' => Auth::id(),  // sambungkan dengan user login
-    ]);
+            'title' => $request->title,
+            'description' => $request->description,
+            'status' => $request->status,
+            'priority' => $request->priority,
+            'date' => $request->date,
+            'id_user' => Auth::id(),  // sambungkan dengan user login
+        ]);
 
         return redirect()->route('home.index')->with('success', 'data berhasil disimpan');
     }
@@ -69,7 +80,10 @@ class todoController extends Controller
 
         ]);
 
-        $edit_todo = todoModel::findOrFail($id);
+        $edit_todo = todoModel::where('id', $id)
+            ->where('id_user', Auth::id())
+            ->firstOrFail(); // hanya data milik user
+
         $edit_todo->update([
             'status' => $request->status,
             'priority' => $request->priority,
@@ -83,7 +97,10 @@ class todoController extends Controller
     //Hapus data yang ada di database
     public function delete($id)
     {
-        $data_todo = todoModel::findOrFail($id);
+        $data_todo = todoModel::where('id', $id)
+            ->where('id_user', Auth::id())
+            ->firstOrFail(); // hanya data milik user
+
         $data_todo->delete();
 
         return redirect()->route('home.index')->with('success', 'data berhasil dihapus');

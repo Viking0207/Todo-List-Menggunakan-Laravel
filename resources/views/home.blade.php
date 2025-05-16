@@ -184,6 +184,13 @@
         </div>
     </div>
 
+    <!-- Tambahan tombol back ke dashboard -->
+    <a href="{{ route('dashboard.index') }}"
+        class="fixed bottom-6 left-6 bg-sky-600 hover:bg-sky-700 text-white w-auto px-4 py-2 rounded-full shadow-lg transition duration-300 z-50 flex items-center gap-2 text-sm font-semibold"
+        title="Kembali ke Dashboard">
+        <i class="fa-solid fa-arrow-left"></i> 🔙 Back
+    </a>
+
     <a href="javascript:window.print()"
         class="fixed bottom-6 right-[5.5rem] bg-emerald-600 hover:bg-emerald-700 text-white w-14 aspect-square rounded-full shadow-lg transition duration-300 z-50 flex items-center justify-center"
         title="Print Data">

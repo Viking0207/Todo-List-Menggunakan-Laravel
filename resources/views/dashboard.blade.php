@@ -8,29 +8,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- FontAwesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        integrity="sha512-pVUQsi+QpI2kzjYtCfjPReh+Udbv6ItOp+PtTzPeEaAgq5TX7RT3YnKRvpuYScOKnp51Ic65p4GzX2JbqJ5X0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="bg-gray-100 min-h-screen font-poppins">
 
     <nav class="bg-white shadow flex items-center justify-between px-6 py-3 sticky top-0 z-30">
-        <a href="{{ route('dashboard.index') }}" class="flex items-center space-x-2 text-blue-600 font-bold text-xl">
+        <a class="flex items-center space-x-2 text-blue-600 font-bold text-xl">
             <i class="fa-solid fa-list-check"></i>
             <span>TodoVick</span>
         </a>
-
-        @if ($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-2 mb-4 rounded">
-            <ul class="list-disc pl-5">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
 
         <form method="GET" action="{{ route('dashboard.index') }}" class="flex-grow max-w-xl mx-6">
             <input type="text" name="q" placeholder="Cari judul atau deskripsi..."
@@ -39,7 +25,8 @@
 
         <div class="flex items-center space-x-4">
             @guest
-                <a href="{{ route('register.form') }}" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded">Register</a>
+                <a href="{{ route('register.form') }}"
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded">Register</a>
                 <a href="{{ route('login') }}" class="bg-lime-600 hover:bg-lime-700 text-white px-4 py-2 rounded">Login</a>
             @endguest
 
@@ -85,11 +72,10 @@
     </main>
 
     @auth
-        <button id="floatingBtn"
-            class="fixed bg-blue-600 text-white rounded-full w-14 h-14 text-2xl flex items-center justify-center shadow-lg transition-all"
-            onclick="document.getElementById('modalAdd').classList.remove('hidden')">
+        <a href="{{ route('home.index') }}"
+            class="fixed bg-blue-600 text-white rounded-full w-14 h-14 text-2xl flex items-center justify-center shadow-lg transition-all">
             +
-        </button>
+        </a>
     @endauth
 
     <!-- Modal Tambah Todo -->
